@@ -1,0 +1,1199 @@
+{
+  "cisco_core_insecure.conf": {
+    "vendor": {
+      "name": "cisco",
+      "confidence": 0.7142857142857143,
+      "matched_signatures": [
+        "version ",
+        "hostname ",
+        "ip ssh ",
+        "line vty ",
+        "logging "
+      ]
+    },
+    "facts": [
+      {
+        "field": "device.hostname",
+        "value": "CORE-EDGE-01",
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:cisco-ios:cisco_core_insecure.conf:3"
+      },
+      {
+        "field": "system.domain_name",
+        "value": "corp.example.local",
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:cisco-ios:cisco_core_insecure.conf:5"
+      },
+      {
+        "field": "management.ssh.version",
+        "value": 1,
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:cisco-ios:cisco_core_insecure.conf:7"
+      },
+      {
+        "field": "management.http.enabled",
+        "value": true,
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:cisco-ios:cisco_core_insecure.conf:8"
+      },
+      {
+        "field": "logging.enabled",
+        "value": true,
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:cisco-ios:cisco_core_insecure.conf:18"
+      },
+      {
+        "field": "logging.enabled",
+        "value": true,
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:cisco-ios:cisco_core_insecure.conf:19"
+      },
+      {
+        "field": "management.vty.range",
+        "value": {
+          "start": 0,
+          "end": 4
+        },
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:cisco-ios:cisco_core_insecure.conf:24"
+      },
+      {
+        "field": "management.ssh.enabled",
+        "value": false,
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:cisco-ios:cisco_core_insecure.conf:25"
+      },
+      {
+        "field": "management.telnet.enabled",
+        "value": true,
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:cisco-ios:cisco_core_insecure.conf:25"
+      },
+      {
+        "field": "management.vty.exec_timeout",
+        "value": {
+          "minutes": 30,
+          "seconds": 0
+        },
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:cisco-ios:cisco_core_insecure.conf:26"
+      },
+      {
+        "field": "management.vty.login_mode",
+        "value": "line-password",
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:cisco-ios:cisco_core_insecure.conf:27"
+      },
+      {
+        "field": "management.vty.range",
+        "value": {
+          "start": 5,
+          "end": 15
+        },
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:cisco-ios:cisco_core_insecure.conf:28"
+      },
+      {
+        "field": "management.ssh.enabled",
+        "value": false,
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:cisco-ios:cisco_core_insecure.conf:29"
+      },
+      {
+        "field": "management.telnet.enabled",
+        "value": true,
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:cisco-ios:cisco_core_insecure.conf:29"
+      },
+      {
+        "field": "management.vty.exec_timeout",
+        "value": {
+          "minutes": 30,
+          "seconds": 0
+        },
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:cisco-ios:cisco_core_insecure.conf:30"
+      },
+      {
+        "field": "management.vty.login_mode",
+        "value": "line-password",
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:cisco-ios:cisco_core_insecure.conf:31"
+      }
+    ],
+    "evidence": [
+      {
+        "source_file": "cisco_core_insecure.conf",
+        "raw_text": "hostname CORE-EDGE-01",
+        "line_number": 3,
+        "source_type": "configuration",
+        "parser": "cisco-ios",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "cisco_core_insecure.conf",
+        "raw_text": "ip domain name corp.example.local",
+        "line_number": 5,
+        "source_type": "configuration",
+        "parser": "cisco-ios",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "cisco_core_insecure.conf",
+        "raw_text": "ip ssh version 1",
+        "line_number": 7,
+        "source_type": "configuration",
+        "parser": "cisco-ios",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "cisco_core_insecure.conf",
+        "raw_text": "ip http server",
+        "line_number": 8,
+        "source_type": "configuration",
+        "parser": "cisco-ios",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "cisco_core_insecure.conf",
+        "raw_text": "logging buffered 16384",
+        "line_number": 18,
+        "source_type": "configuration",
+        "parser": "cisco-ios",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "cisco_core_insecure.conf",
+        "raw_text": "logging trap warnings",
+        "line_number": 19,
+        "source_type": "configuration",
+        "parser": "cisco-ios",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "cisco_core_insecure.conf",
+        "raw_text": "line vty 0 4",
+        "line_number": 24,
+        "source_type": "configuration",
+        "parser": "cisco-ios",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "cisco_core_insecure.conf",
+        "raw_text": " transport input telnet",
+        "line_number": 25,
+        "source_type": "configuration",
+        "parser": "cisco-ios",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "cisco_core_insecure.conf",
+        "raw_text": " transport input telnet",
+        "line_number": 25,
+        "source_type": "configuration",
+        "parser": "cisco-ios",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "cisco_core_insecure.conf",
+        "raw_text": " exec-timeout 30 0",
+        "line_number": 26,
+        "source_type": "configuration",
+        "parser": "cisco-ios",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "cisco_core_insecure.conf",
+        "raw_text": " login",
+        "line_number": 27,
+        "source_type": "configuration",
+        "parser": "cisco-ios",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "cisco_core_insecure.conf",
+        "raw_text": "line vty 5 15",
+        "line_number": 28,
+        "source_type": "configuration",
+        "parser": "cisco-ios",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "cisco_core_insecure.conf",
+        "raw_text": " transport input telnet",
+        "line_number": 29,
+        "source_type": "configuration",
+        "parser": "cisco-ios",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "cisco_core_insecure.conf",
+        "raw_text": " transport input telnet",
+        "line_number": 29,
+        "source_type": "configuration",
+        "parser": "cisco-ios",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "cisco_core_insecure.conf",
+        "raw_text": " exec-timeout 30 0",
+        "line_number": 30,
+        "source_type": "configuration",
+        "parser": "cisco-ios",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "cisco_core_insecure.conf",
+        "raw_text": " login",
+        "line_number": 31,
+        "source_type": "configuration",
+        "parser": "cisco-ios",
+        "confidence": 1.0
+      }
+    ],
+    "baseline": {
+      "device": {
+        "vendor": null,
+        "model": null,
+        "platform": null,
+        "os_version": null,
+        "hostname": "CORE-EDGE-01"
+      },
+      "management": {
+        "ssh": {
+          "enabled": false,
+          "version": 1
+        },
+        "http": {
+          "enabled": true
+        },
+        "telnet": {
+          "enabled": true
+        }
+      },
+      "authentication": {
+        "login_protection": {
+          "enabled": null,
+          "attempts": null,
+          "window_seconds": null,
+          "block_seconds": null
+        }
+      },
+      "logging": {
+        "enabled": true
+      }
+    },
+    "findings": [
+      {
+        "control_id": "MGMT-SSH-001",
+        "status": "FAIL",
+        "severity": "high",
+        "description": "SSH must use version 2.",
+        "expected": 2,
+        "observed": 1,
+        "frameworks": [
+          "CIS",
+          "NIST SP 800-53",
+          "DISA STIG",
+          "ISO/IEC 27001",
+          "PCI-DSS",
+          "SOC 2"
+        ]
+      },
+      {
+        "control_id": "MGMT-TELNET-001",
+        "status": "FAIL",
+        "severity": "high",
+        "description": "Telnet management must be disabled.",
+        "expected": false,
+        "observed": true,
+        "frameworks": [
+          "CIS",
+          "NIST SP 800-53",
+          "DISA STIG",
+          "ISO/IEC 27001",
+          "PCI-DSS",
+          "SOC 2"
+        ]
+      },
+      {
+        "control_id": "MGMT-HTTP-001",
+        "status": "FAIL",
+        "severity": "high",
+        "description": "HTTP management must be disabled.",
+        "expected": false,
+        "observed": true,
+        "frameworks": [
+          "CIS",
+          "NIST SP 800-53",
+          "DISA STIG",
+          "ISO/IEC 27001",
+          "PCI-DSS",
+          "SOC 2"
+        ]
+      },
+      {
+        "control_id": "AUTH-LOGIN-001",
+        "status": "UNKNOWN",
+        "severity": "medium",
+        "description": "Login protection must be enabled.",
+        "expected": true,
+        "observed": null,
+        "frameworks": [
+          "CIS",
+          "NIST SP 800-53",
+          "DISA STIG",
+          "ISO/IEC 27001",
+          "PCI-DSS",
+          "SOC 2"
+        ]
+      },
+      {
+        "control_id": "LOG-001",
+        "status": "PASS",
+        "severity": "medium",
+        "description": "Security logging must be enabled.",
+        "expected": true,
+        "observed": true,
+        "frameworks": [
+          "CIS",
+          "NIST SP 800-53",
+          "DISA STIG",
+          "ISO/IEC 27001",
+          "PCI-DSS",
+          "SOC 2"
+        ]
+      }
+    ],
+    "remediations": [
+      {
+        "control_id": "MGMT-SSH-001",
+        "vendor": "cisco",
+        "platform": "ios",
+        "command": "ip ssh version 2",
+        "description": "Enable SSH version 2 for secure management.",
+        "requires_change_window": true
+      },
+      {
+        "control_id": "MGMT-TELNET-001",
+        "vendor": "cisco",
+        "platform": "ios",
+        "command": "transport input ssh",
+        "description": "Restrict VTY access to SSH and disable Telnet.",
+        "requires_change_window": true
+      },
+      {
+        "control_id": "MGMT-HTTP-001",
+        "vendor": "cisco",
+        "platform": "ios",
+        "command": "no ip http server",
+        "description": "Disable insecure HTTP management.",
+        "requires_change_window": true
+      }
+    ]
+  },
+  "cisco_hardened.conf": {
+    "vendor": {
+      "name": "cisco",
+      "confidence": 0.8571428571428571,
+      "matched_signatures": [
+        "version ",
+        "hostname ",
+        "ip ssh ",
+        "line vty ",
+        "service timestamps ",
+        "logging "
+      ]
+    },
+    "facts": [
+      {
+        "field": "device.hostname",
+        "value": "CORE-HARDENED-01",
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:cisco-ios:cisco_hardened.conf:5"
+      },
+      {
+        "field": "system.domain_name",
+        "value": "secure.enterprise.com",
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:cisco-ios:cisco_hardened.conf:8"
+      },
+      {
+        "field": "management.ssh.version",
+        "value": 2,
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:cisco-ios:cisco_hardened.conf:9"
+      },
+      {
+        "field": "management.http.enabled",
+        "value": false,
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:cisco-ios:cisco_hardened.conf:12"
+      },
+      {
+        "field": "logging.enabled",
+        "value": true,
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:cisco-ios:cisco_hardened.conf:14"
+      },
+      {
+        "field": "logging.enabled",
+        "value": true,
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:cisco-ios:cisco_hardened.conf:15"
+      },
+      {
+        "field": "management.vty.range",
+        "value": {
+          "start": 0,
+          "end": 15
+        },
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:cisco-ios:cisco_hardened.conf:20"
+      },
+      {
+        "field": "management.ssh.enabled",
+        "value": true,
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:cisco-ios:cisco_hardened.conf:21"
+      },
+      {
+        "field": "management.telnet.enabled",
+        "value": false,
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:cisco-ios:cisco_hardened.conf:21"
+      },
+      {
+        "field": "management.vty.exec_timeout",
+        "value": {
+          "minutes": 10,
+          "seconds": 0
+        },
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:cisco-ios:cisco_hardened.conf:22"
+      }
+    ],
+    "evidence": [
+      {
+        "source_file": "cisco_hardened.conf",
+        "raw_text": "hostname CORE-HARDENED-01",
+        "line_number": 5,
+        "source_type": "configuration",
+        "parser": "cisco-ios",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "cisco_hardened.conf",
+        "raw_text": "ip domain name secure.enterprise.com",
+        "line_number": 8,
+        "source_type": "configuration",
+        "parser": "cisco-ios",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "cisco_hardened.conf",
+        "raw_text": "ip ssh version 2",
+        "line_number": 9,
+        "source_type": "configuration",
+        "parser": "cisco-ios",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "cisco_hardened.conf",
+        "raw_text": "no ip http server",
+        "line_number": 12,
+        "source_type": "configuration",
+        "parser": "cisco-ios",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "cisco_hardened.conf",
+        "raw_text": "logging buffered 65535",
+        "line_number": 14,
+        "source_type": "configuration",
+        "parser": "cisco-ios",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "cisco_hardened.conf",
+        "raw_text": "logging host 10.10.40.50",
+        "line_number": 15,
+        "source_type": "configuration",
+        "parser": "cisco-ios",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "cisco_hardened.conf",
+        "raw_text": "line vty 0 15",
+        "line_number": 20,
+        "source_type": "configuration",
+        "parser": "cisco-ios",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "cisco_hardened.conf",
+        "raw_text": " transport input ssh",
+        "line_number": 21,
+        "source_type": "configuration",
+        "parser": "cisco-ios",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "cisco_hardened.conf",
+        "raw_text": " transport input ssh",
+        "line_number": 21,
+        "source_type": "configuration",
+        "parser": "cisco-ios",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "cisco_hardened.conf",
+        "raw_text": " exec-timeout 10 0",
+        "line_number": 22,
+        "source_type": "configuration",
+        "parser": "cisco-ios",
+        "confidence": 1.0
+      }
+    ],
+    "baseline": {
+      "device": {
+        "vendor": null,
+        "model": null,
+        "platform": null,
+        "os_version": null,
+        "hostname": "CORE-HARDENED-01"
+      },
+      "management": {
+        "ssh": {
+          "enabled": true,
+          "version": 2
+        },
+        "http": {
+          "enabled": false
+        },
+        "telnet": {
+          "enabled": false
+        }
+      },
+      "authentication": {
+        "login_protection": {
+          "enabled": null,
+          "attempts": null,
+          "window_seconds": null,
+          "block_seconds": null
+        }
+      },
+      "logging": {
+        "enabled": true
+      }
+    },
+    "findings": [
+      {
+        "control_id": "MGMT-SSH-001",
+        "status": "PASS",
+        "severity": "high",
+        "description": "SSH must use version 2.",
+        "expected": 2,
+        "observed": 2,
+        "frameworks": [
+          "CIS",
+          "NIST SP 800-53",
+          "DISA STIG",
+          "ISO/IEC 27001",
+          "PCI-DSS",
+          "SOC 2"
+        ]
+      },
+      {
+        "control_id": "MGMT-TELNET-001",
+        "status": "PASS",
+        "severity": "high",
+        "description": "Telnet management must be disabled.",
+        "expected": false,
+        "observed": false,
+        "frameworks": [
+          "CIS",
+          "NIST SP 800-53",
+          "DISA STIG",
+          "ISO/IEC 27001",
+          "PCI-DSS",
+          "SOC 2"
+        ]
+      },
+      {
+        "control_id": "MGMT-HTTP-001",
+        "status": "PASS",
+        "severity": "high",
+        "description": "HTTP management must be disabled.",
+        "expected": false,
+        "observed": false,
+        "frameworks": [
+          "CIS",
+          "NIST SP 800-53",
+          "DISA STIG",
+          "ISO/IEC 27001",
+          "PCI-DSS",
+          "SOC 2"
+        ]
+      },
+      {
+        "control_id": "AUTH-LOGIN-001",
+        "status": "UNKNOWN",
+        "severity": "medium",
+        "description": "Login protection must be enabled.",
+        "expected": true,
+        "observed": null,
+        "frameworks": [
+          "CIS",
+          "NIST SP 800-53",
+          "DISA STIG",
+          "ISO/IEC 27001",
+          "PCI-DSS",
+          "SOC 2"
+        ]
+      },
+      {
+        "control_id": "LOG-001",
+        "status": "PASS",
+        "severity": "medium",
+        "description": "Security logging must be enabled.",
+        "expected": true,
+        "observed": true,
+        "frameworks": [
+          "CIS",
+          "NIST SP 800-53",
+          "DISA STIG",
+          "ISO/IEC 27001",
+          "PCI-DSS",
+          "SOC 2"
+        ]
+      }
+    ],
+    "remediations": []
+  },
+  "junos_edge.conf": {
+    "vendor": {
+      "name": "juniper",
+      "confidence": 0.625,
+      "matched_signatures": [
+        "set system ",
+        "set system host-name",
+        "set system services",
+        "set interfaces ",
+        "set snmp "
+      ]
+    },
+    "facts": [
+      {
+        "field": "device.hostname",
+        "value": "JUNIPER-EDGE-MX",
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:juniper-junos:junos_edge.conf:1"
+      },
+      {
+        "field": "management.ssh.enabled",
+        "value": true,
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:juniper-junos:junos_edge.conf:6"
+      },
+      {
+        "field": "management.telnet.enabled",
+        "value": true,
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:juniper-junos:junos_edge.conf:7"
+      },
+      {
+        "field": "management.http.enabled",
+        "value": true,
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:juniper-junos:junos_edge.conf:8"
+      },
+      {
+        "field": "management.ssh.version",
+        "value": 2,
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:juniper-junos:junos_edge.conf:1"
+      },
+      {
+        "field": "logging.enabled",
+        "value": true,
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:juniper-junos:junos_edge.conf:1"
+      },
+      {
+        "field": "authentication.login_protection.enabled",
+        "value": false,
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:juniper-junos:junos_edge.conf:1"
+      }
+    ],
+    "evidence": [
+      {
+        "source_file": "junos_edge.conf",
+        "raw_text": "set system host-name JUNIPER-EDGE-MX",
+        "line_number": 1,
+        "source_type": "configuration",
+        "parser": "juniper-junos",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "junos_edge.conf",
+        "raw_text": "set system services ssh protocol-version v2",
+        "line_number": 6,
+        "source_type": "configuration",
+        "parser": "juniper-junos",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "junos_edge.conf",
+        "raw_text": "set system services telnet",
+        "line_number": 7,
+        "source_type": "configuration",
+        "parser": "juniper-junos",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "junos_edge.conf",
+        "raw_text": "set system services web-management http",
+        "line_number": 8,
+        "source_type": "configuration",
+        "parser": "juniper-junos",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "junos_edge.conf",
+        "raw_text": "services { ssh }",
+        "line_number": 1,
+        "source_type": "configuration",
+        "parser": "juniper-junos",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "junos_edge.conf",
+        "raw_text": "system syslog enabled",
+        "line_number": 1,
+        "source_type": "configuration",
+        "parser": "juniper-junos",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "junos_edge.conf",
+        "raw_text": "no login retry-options configured",
+        "line_number": 1,
+        "source_type": "configuration",
+        "parser": "juniper-junos",
+        "confidence": 1.0
+      }
+    ],
+    "baseline": {
+      "device": {
+        "vendor": null,
+        "model": null,
+        "platform": null,
+        "os_version": null,
+        "hostname": "JUNIPER-EDGE-MX"
+      },
+      "management": {
+        "ssh": {
+          "enabled": true,
+          "version": 2
+        },
+        "http": {
+          "enabled": true
+        },
+        "telnet": {
+          "enabled": true
+        }
+      },
+      "authentication": {
+        "login_protection": {
+          "enabled": null,
+          "attempts": null,
+          "window_seconds": null,
+          "block_seconds": null
+        }
+      },
+      "logging": {
+        "enabled": true
+      }
+    },
+    "findings": [
+      {
+        "control_id": "MGMT-SSH-001",
+        "status": "PASS",
+        "severity": "high",
+        "description": "SSH must use version 2.",
+        "expected": 2,
+        "observed": 2,
+        "frameworks": [
+          "CIS",
+          "NIST SP 800-53",
+          "DISA STIG",
+          "ISO/IEC 27001",
+          "PCI-DSS",
+          "SOC 2"
+        ]
+      },
+      {
+        "control_id": "MGMT-TELNET-001",
+        "status": "FAIL",
+        "severity": "high",
+        "description": "Telnet management must be disabled.",
+        "expected": false,
+        "observed": true,
+        "frameworks": [
+          "CIS",
+          "NIST SP 800-53",
+          "DISA STIG",
+          "ISO/IEC 27001",
+          "PCI-DSS",
+          "SOC 2"
+        ]
+      },
+      {
+        "control_id": "MGMT-HTTP-001",
+        "status": "FAIL",
+        "severity": "high",
+        "description": "HTTP management must be disabled.",
+        "expected": false,
+        "observed": true,
+        "frameworks": [
+          "CIS",
+          "NIST SP 800-53",
+          "DISA STIG",
+          "ISO/IEC 27001",
+          "PCI-DSS",
+          "SOC 2"
+        ]
+      },
+      {
+        "control_id": "AUTH-LOGIN-001",
+        "status": "UNKNOWN",
+        "severity": "medium",
+        "description": "Login protection must be enabled.",
+        "expected": true,
+        "observed": null,
+        "frameworks": [
+          "CIS",
+          "NIST SP 800-53",
+          "DISA STIG",
+          "ISO/IEC 27001",
+          "PCI-DSS",
+          "SOC 2"
+        ]
+      },
+      {
+        "control_id": "LOG-001",
+        "status": "PASS",
+        "severity": "medium",
+        "description": "Security logging must be enabled.",
+        "expected": true,
+        "observed": true,
+        "frameworks": [
+          "CIS",
+          "NIST SP 800-53",
+          "DISA STIG",
+          "ISO/IEC 27001",
+          "PCI-DSS",
+          "SOC 2"
+        ]
+      }
+    ],
+    "remediations": [
+      {
+        "control_id": "MGMT-TELNET-001",
+        "vendor": "juniper",
+        "platform": "junos",
+        "command": "delete system services telnet",
+        "description": "Disable insecure cleartext Telnet management on JunOS.",
+        "requires_change_window": true
+      },
+      {
+        "control_id": "MGMT-HTTP-001",
+        "vendor": "juniper",
+        "platform": "junos",
+        "command": "delete system services web-management http",
+        "description": "Disable insecure cleartext HTTP web management on JunOS.",
+        "requires_change_window": true
+      }
+    ]
+  },
+  "paloalto_perimeter.conf": {
+    "vendor": {
+      "name": "paloalto",
+      "confidence": 0.4,
+      "matched_signatures": [
+        "set deviceconfig ",
+        "set deviceconfig system",
+        "set shared log-settings",
+        "set zone "
+      ]
+    },
+    "facts": [
+      {
+        "field": "device.hostname",
+        "value": "PAN-FIREWALL-01",
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:paloalto-panos:paloalto_perimeter.conf:1"
+      },
+      {
+        "field": "management.ssh.enabled",
+        "value": true,
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:paloalto-panos:paloalto_perimeter.conf:1"
+      },
+      {
+        "field": "management.ssh.version",
+        "value": 2,
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:paloalto-panos:paloalto_perimeter.conf:1"
+      },
+      {
+        "field": "management.telnet.enabled",
+        "value": false,
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:paloalto-panos:paloalto_perimeter.conf:1"
+      },
+      {
+        "field": "management.http.enabled",
+        "value": true,
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:paloalto-panos:paloalto_perimeter.conf:1"
+      },
+      {
+        "field": "logging.enabled",
+        "value": true,
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:paloalto-panos:paloalto_perimeter.conf:1"
+      },
+      {
+        "field": "authentication.login_protection.enabled",
+        "value": true,
+        "confidence": 1.0,
+        "source": "deterministic",
+        "evidence_id": "evidence:paloalto-panos:paloalto_perimeter.conf:1"
+      }
+    ],
+    "evidence": [
+      {
+        "source_file": "paloalto_perimeter.conf",
+        "raw_text": "set deviceconfig system hostname PAN-FIREWALL-01",
+        "line_number": 1,
+        "source_type": "configuration",
+        "parser": "paloalto-panos",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "paloalto_perimeter.conf",
+        "raw_text": "system management ssh service",
+        "line_number": 1,
+        "source_type": "configuration",
+        "parser": "paloalto-panos",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "paloalto_perimeter.conf",
+        "raw_text": "PAN-OS standard enforces SSHv2",
+        "line_number": 1,
+        "source_type": "configuration",
+        "parser": "paloalto-panos",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "paloalto_perimeter.conf",
+        "raw_text": "Telnet state (disabled=True)",
+        "line_number": 1,
+        "source_type": "configuration",
+        "parser": "paloalto-panos",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "paloalto_perimeter.conf",
+        "raw_text": "HTTP web management (disabled=False)",
+        "line_number": 1,
+        "source_type": "configuration",
+        "parser": "paloalto-panos",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "paloalto_perimeter.conf",
+        "raw_text": "Syslog logging configuration",
+        "line_number": 1,
+        "source_type": "configuration",
+        "parser": "paloalto-panos",
+        "confidence": 1.0
+      },
+      {
+        "source_file": "paloalto_perimeter.conf",
+        "raw_text": "PAN-OS admin lockout policy",
+        "line_number": 1,
+        "source_type": "configuration",
+        "parser": "paloalto-panos",
+        "confidence": 1.0
+      }
+    ],
+    "baseline": {
+      "device": {
+        "vendor": null,
+        "model": null,
+        "platform": null,
+        "os_version": null,
+        "hostname": "PAN-FIREWALL-01"
+      },
+      "management": {
+        "ssh": {
+          "enabled": true,
+          "version": 2
+        },
+        "http": {
+          "enabled": true
+        },
+        "telnet": {
+          "enabled": false
+        }
+      },
+      "authentication": {
+        "login_protection": {
+          "enabled": null,
+          "attempts": null,
+          "window_seconds": null,
+          "block_seconds": null
+        }
+      },
+      "logging": {
+        "enabled": true
+      }
+    },
+    "findings": [
+      {
+        "control_id": "MGMT-SSH-001",
+        "status": "PASS",
+        "severity": "high",
+        "description": "SSH must use version 2.",
+        "expected": 2,
+        "observed": 2,
+        "frameworks": [
+          "CIS",
+          "NIST SP 800-53",
+          "DISA STIG",
+          "ISO/IEC 27001",
+          "PCI-DSS",
+          "SOC 2"
+        ]
+      },
+      {
+        "control_id": "MGMT-TELNET-001",
+        "status": "PASS",
+        "severity": "high",
+        "description": "Telnet management must be disabled.",
+        "expected": false,
+        "observed": false,
+        "frameworks": [
+          "CIS",
+          "NIST SP 800-53",
+          "DISA STIG",
+          "ISO/IEC 27001",
+          "PCI-DSS",
+          "SOC 2"
+        ]
+      },
+      {
+        "control_id": "MGMT-HTTP-001",
+        "status": "FAIL",
+        "severity": "high",
+        "description": "HTTP management must be disabled.",
+        "expected": false,
+        "observed": true,
+        "frameworks": [
+          "CIS",
+          "NIST SP 800-53",
+          "DISA STIG",
+          "ISO/IEC 27001",
+          "PCI-DSS",
+          "SOC 2"
+        ]
+      },
+      {
+        "control_id": "AUTH-LOGIN-001",
+        "status": "UNKNOWN",
+        "severity": "medium",
+        "description": "Login protection must be enabled.",
+        "expected": true,
+        "observed": null,
+        "frameworks": [
+          "CIS",
+          "NIST SP 800-53",
+          "DISA STIG",
+          "ISO/IEC 27001",
+          "PCI-DSS",
+          "SOC 2"
+        ]
+      },
+      {
+        "control_id": "LOG-001",
+        "status": "PASS",
+        "severity": "medium",
+        "description": "Security logging must be enabled.",
+        "expected": true,
+        "observed": true,
+        "frameworks": [
+          "CIS",
+          "NIST SP 800-53",
+          "DISA STIG",
+          "ISO/IEC 27001",
+          "PCI-DSS",
+          "SOC 2"
+        ]
+      }
+    ],
+    "remediations": [
+      {
+        "control_id": "MGMT-HTTP-001",
+        "vendor": "paloalto",
+        "platform": "panos",
+        "command": "set deviceconfig system service disable-http yes",
+        "description": "Disable insecure HTTP administrative management on PAN-OS.",
+        "requires_change_window": true
+      }
+    ]
+  }
+}
