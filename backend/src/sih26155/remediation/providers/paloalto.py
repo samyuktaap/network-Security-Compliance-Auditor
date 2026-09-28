@@ -7,6 +7,7 @@ and rollback instructions.
 
 from __future__ import annotations
 
+import os
 import re
 from typing import Any
 
@@ -30,6 +31,7 @@ class PaloAltoRemediationProvider(BaseRemediationProvider):
 
     @property
     def rules(self) -> dict[str, RemediationDefinition]:
+        syslog_ip = os.getenv("COMPLIANCE_SYSLOG_SERVER", "10.10.40.50")
         return {
             "MGMT-TELNET-001": RemediationDefinition(
                 control_id="MGMT-TELNET-001",
@@ -85,7 +87,7 @@ class PaloAltoRemediationProvider(BaseRemediationProvider):
             "LOG-001": RemediationDefinition(
                 control_id="LOG-001",
                 commands=[
-                    "set shared log-settings syslog PAN-SYSLOG server 10.10.40.50 port 514 facility LOG_USER",
+                    f"set shared log-settings syslog PAN-SYSLOG server {syslog_ip} port 514 facility LOG_USER",
                 ],
                 rollback_commands=[
                     "delete shared log-settings syslog PAN-SYSLOG",
@@ -146,17 +148,23 @@ class PaloAltoRemediationProvider(BaseRemediationProvider):
         current_config: str,
         baseline: dict[str, Any] | None = None,
     ) -> bool:
-        cfg = current_config.lower()
+        active_lines = [
+            line.strip().lower()
+            for line in current_config.splitlines()
+            if line.strip() and not line.strip().startswith(("#", "!"))
+        ]
+        cfg = "\n".join(active_lines)
+
         if control_id == "MGMT-TELNET-001":
-            return "disable-telnet yes" in cfg or "telnet" not in cfg
+            return "disable-telnet yes" in cfg or not any("service telnet" in l or "enable-telnet" in l for l in active_lines)
         elif control_id == "MGMT-SSH-001":
-            return "ssh ciphers" in cfg or "ssh-ciphers" in cfg
+            return any("ssh ciphers" in l or "ssh-ciphers" in l for l in active_lines)
         elif control_id == "MGMT-HTTP-001":
             return "disable-http yes" in cfg
         elif control_id == "AUTH-LOGIN-001":
-            return "failed-attempts" in cfg
+            return any("failed-attempts" in l for l in active_lines)
         elif control_id == "LOG-001":
-            return "syslog" in cfg
+            return any("shared log-settings syslog" in l or "syslog" in l for l in active_lines)
         return False
 
     def apply_to_config_text(

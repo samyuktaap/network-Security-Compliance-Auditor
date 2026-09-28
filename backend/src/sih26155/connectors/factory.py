@@ -8,9 +8,11 @@ from __future__ import annotations
 
 from typing import Type
 
+from sih26155.connectors.arista import AristaConnector
 from sih26155.connectors.base import DeviceConnector
 from sih26155.connectors.cisco import CiscoConnector
 from sih26155.connectors.fortinet import FortinetConnector
+from sih26155.connectors.juniper import JuniperConnector
 from sih26155.connectors.linux import LinuxConnector
 from sih26155.connectors.mikrotik import MikroTikConnector
 from sih26155.connectors.paloalto import PaloAltoConnector
@@ -25,6 +27,12 @@ _CONNECTOR_REGISTRY: dict[str, Type[DeviceConnector]] = {
     "paloalto": PaloAltoConnector,
     "palo_alto": PaloAltoConnector,
     "panos": PaloAltoConnector,
+    "juniper": JuniperConnector,
+    "juniper_junos": JuniperConnector,
+    "junos": JuniperConnector,
+    "arista": AristaConnector,
+    "arista_eos": AristaConnector,
+    "eos": AristaConnector,
     "mikrotik": MikroTikConnector,
     "routeros": MikroTikConnector,
     "linux": LinuxConnector,

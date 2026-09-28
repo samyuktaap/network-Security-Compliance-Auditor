@@ -18,6 +18,8 @@ import concurrent.futures
 from dataclasses import dataclass, field
 import datetime
 import ipaddress
+import logging
+import os
 import re
 import socket
 import subprocess
@@ -26,6 +28,8 @@ from typing import Any
 import uuid
 
 from sih26155.discovery.identifier import DeviceIdentification, identify_device
+
+logger = logging.getLogger(__name__)
 
 # Standard management ports inspected during non-destructive discovery
 MANAGEMENT_PORTS = [22, 80, 443, 830, 8728]
@@ -78,13 +82,16 @@ def read_local_arp_table() -> dict[str, str]:
         for line in res.stdout.splitlines():
             line_str = line.strip()
             # Match IPv4 and MAC: e.g. 192.168.1.1  00-11-22-33-44-55  dynamic
-            match = re.search(r"(\d+\.\d+\.\d+\.\d+)\s+([0-9a-fA-F[:-]{17})", line_str)
+            match = re.search(
+                r"(\d+\.\d+\.\d+\.\d+)\s+((?:[0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2})",
+                line_str,
+            )
             if match:
                 ip = match.group(1)
                 mac = match.group(2).replace("-", ":").lower()
                 arp_map[ip] = mac
-    except Exception:
-        pass
+    except Exception as exc:
+        logger.debug("Failed reading OS ARP table: %s", exc)
     return arp_map
 
 
@@ -115,10 +122,10 @@ def probe_host(
                         if banner_bytes:
                             banner_str = banner_bytes.decode("utf-8", errors="ignore").strip()
                             banners[22] = banner_str
-                    except Exception:
-                        pass
-        except Exception:
-            pass
+                    except Exception as banner_err:
+                        logger.debug("Banner acquisition error on %s:%d: %s", ip, port, banner_err)
+        except Exception as probe_err:
+            logger.debug("Probe error on %s:%d: %s", ip, port, probe_err)
         finally:
             sock.close()
 
@@ -127,10 +134,11 @@ def probe_host(
     if not reachability:
         try:
             # Windows: -n 1 -w 300, Linux: -c 1 -W 1
-            cmd = ["ping", "-n", "1", "-w", "300", ip] if subprocess.os.name == "nt" else ["ping", "-c", "1", "-W", "1", ip]
+            cmd = ["ping", "-n", "1", "-w", "300", ip] if os.name == "nt" else ["ping", "-c", "1", "-W", "1", ip]
             res = subprocess.run(cmd, capture_output=True, timeout=1)
             reachability = (res.returncode == 0)
-        except Exception:
+        except Exception as ping_err:
+            logger.debug("Ping probe failed for %s: %s", ip, ping_err)
             reachability = False
 
     if not reachability:
@@ -176,7 +184,7 @@ def probe_host(
 
 def run_discovery_scan(
     cidr: str,
-    max_hosts: int = 64,
+    max_hosts: int = 256,
 ) -> list[DiscoveredHost]:
     """
     Executes concurrent non-destructive discovery over an authorized subnet.
@@ -203,8 +211,8 @@ def run_discovery_scan(
                 res = future.result()
                 if res is not None:
                     discovered.append(res)
-            except Exception:
-                pass
+            except Exception as thread_err:
+                logger.warning("Discovery thread encountered error: %s", thread_err)
 
     # Sort deterministically by IP
     discovered.sort(key=lambda d: ipaddress.ip_address(d.ip))

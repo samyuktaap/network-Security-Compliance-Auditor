@@ -1,6 +1,6 @@
 from typing import Any, Literal, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, SecretStr
 
 
 class AnalysisRequest(BaseModel):
@@ -27,7 +27,7 @@ class LiveFetchRequest(BaseModel):
 
     host: str = Field(description="Device hostname or IP address")
     username: str = Field(description="SSH / API username")
-    password: str = Field(description="SSH / API password")
+    password: SecretStr = Field(description="SSH / API password")
     device_type: str = Field(
         description=(
             "Transport-specific device identifier. "
@@ -40,7 +40,7 @@ class LiveFetchRequest(BaseModel):
         description="Collector transport: 'ssh' uses Netmiko, 'napalm' uses NAPALM.",
     )
     port: int = Field(default=22, description="TCP port")
-    secret: Optional[str] = Field(default="", description="Enable secret (Cisco SSH only)")
+    secret: Optional[SecretStr] = Field(default=SecretStr(""), description="Enable secret (Cisco SSH only)")
     timeout: int = Field(default=30, description="Connection timeout in seconds")
     session_timeout: int = Field(default=60, description="Command read timeout in seconds")
     optional_args: dict[str, Any] = Field(

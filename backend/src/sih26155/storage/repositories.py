@@ -562,7 +562,8 @@ class RemediationAuditRepository:
         self._db = db
 
     def record_action(self, action_dict: dict[str, Any]) -> RemediationAuditRecord:
-        rec_id = action_dict.get("id") or f"audit-{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')}-{action_dict.get('control_id', 'fix').lower()}"
+        unique_suffix = uuid.uuid4().hex[:6]
+        rec_id = action_dict.get("id") or f"audit-{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')}-{unique_suffix}-{action_dict.get('control_id', 'fix').lower()}"
         record = RemediationAuditRecord(
             id=rec_id,
             device_id=action_dict.get("device_id", "unknown"),

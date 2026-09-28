@@ -191,14 +191,17 @@ class RemediationEngine:
         raw_config: str,
         approved_by: str = "Security Admin",
         is_demo: bool = False,
+        dry_run: bool = True,
+        credentials: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         """
         Executes the verified live remediation pipeline:
         1. Precondition Safety Verification
         2. Pre-Change Configuration Backup Snapshot
-        3. Application of Verified Commands
+        3. Application of Verified Commands (Simulated or Real Live Push)
         4. Re-collection & Re-Audit through Compliance Engine
         5. Verification: Mark RESOLVED only if post-audit passes.
+        6. Automatic Rollback: If live push verification fails, immediately restore previous state.
         """
         provider = get_remediation_provider(vendor)
         rule = provider.rules.get(control_id)
@@ -225,8 +228,28 @@ class RemediationEngine:
         backup_snapshot_id = f"backup-{device_id}-{uuid.uuid4().hex[:6]}"
         backup_config = raw_config
 
-        # 3. Apply fix to configuration
-        updated_config = provider.apply_to_config_text(raw_config, rule.commands, control_id)
+        # 3. Apply fix (Live device push or simulated config patch)
+        is_real_device_execution = (not dry_run) and (not is_demo) and bool(credentials)
+        live_error = None
+        updated_config = raw_config
+
+        if is_real_device_execution and credentials:
+            try:
+                from sih26155.connectors.factory import get_connector
+                connector = get_connector(
+                    vendor=vendor,
+                    host=credentials.get("host", hostname),
+                    username=credentials.get("username", ""),
+                    password=credentials.get("password", ""),
+                    port=credentials.get("port", 22),
+                )
+                connector.apply_remediation_commands(rule.commands)
+                # Re-fetch real running config from device
+                updated_config = connector.collect_configuration()
+            except Exception as exc:
+                live_error = str(exc)
+        else:
+            updated_config = provider.apply_to_config_text(raw_config, rule.commands, control_id)
 
         # 4. Re-audit with real compliance evaluator
         re_audit_result = analyze_config(
@@ -242,18 +265,40 @@ class RemediationEngine:
 
         # 5. Check if target control now passes
         target_finding = next((f for f in findings if f.get("control_id") == control_id), None)
-        is_resolved = target_finding is not None and target_finding.get("status") == "PASS"
+        is_resolved = target_finding is not None and target_finding.get("status") == "PASS" and not live_error
+
+        # 6. Automatic Rollback if real device push failed verification
+        rolled_back = False
+        if is_real_device_execution and not is_resolved and credentials and rule.rollback_commands:
+            try:
+                connector = get_connector(
+                    vendor=vendor,
+                    host=credentials.get("host", hostname),
+                    username=credentials.get("username", ""),
+                    password=credentials.get("password", ""),
+                    port=credentials.get("port", 22),
+                )
+                connector.apply_remediation_commands(rule.rollback_commands)
+                updated_config = connector.collect_configuration()
+                rolled_back = True
+            except Exception:
+                pass
 
         # Generate Unified Diff
         diff = provider.generate_unified_diff(raw_config, updated_config, hostname)
 
+        status_result = "RESOLVED" if is_resolved else ("ROLLED_BACK_VERIFICATION_FAILED" if rolled_back else "VERIFICATION_FAILED")
+        if live_error:
+            status_result = f"FAILED: {live_error}"
+
         return {
-            "status": "RESOLVED" if is_resolved else "VERIFICATION_FAILED",
+            "status": status_result,
             "resolved": is_resolved,
             "control_id": control_id,
             "device_id": device_id,
             "hostname": hostname,
             "vendor": provider.vendor_name,
+            "dry_run": not is_real_device_execution,
             "commands_applied": rule.commands,
             "rollback_commands": rule.rollback_commands,
             "backup_snapshot_id": backup_snapshot_id,

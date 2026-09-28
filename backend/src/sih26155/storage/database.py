@@ -1,4 +1,4 @@
-﻿"""
+"""
 PostgreSQL database engine and session factory.
 
 Connection is configured via environment variable DATABASE_URL.
@@ -11,12 +11,15 @@ Set in .env (or environment):
 
 from __future__ import annotations
 
+import logging
 import os
 from contextlib import contextmanager
 from typing import Generator
 
-from sqlalchemy import create_engine, event
+from sqlalchemy import create_engine, event, text
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
+
+logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
 # Connection URL
@@ -27,9 +30,9 @@ _DATABASE_URL: str = os.getenv(
     "sqlite:///./data/compliance.db",   # local dev fallback
 )
 
-# SQLite needs check_same_thread=False for FastAPI
+# SQLite needs check_same_thread=False for FastAPI and busy timeout to avoid locked DB
 _connect_args: dict = (
-    {"check_same_thread": False}
+    {"check_same_thread": False, "timeout": 30}
     if _DATABASE_URL.startswith("sqlite")
     else {}
 )
@@ -41,12 +44,42 @@ engine = create_engine(
     echo=False,
 )
 
+if _DATABASE_URL.startswith("sqlite"):
+    @event.listens_for(engine, "connect")
+    def _set_sqlite_pragmas(dbapi_connection, connection_record):
+        """Enables Write-Ahead Logging (WAL) and normal sync for improved concurrent writes."""
+        cursor = dbapi_connection.cursor()
+        try:
+            cursor.execute("PRAGMA journal_mode=WAL")
+            cursor.execute("PRAGMA synchronous=NORMAL")
+        except Exception as exc:
+            logger.debug("Failed setting SQLite WAL pragma: %s", exc)
+        finally:
+            cursor.close()
+
+    if os.getenv("ENVIRONMENT", "").lower() in ("production", "prod"):
+        logger.warning(
+            "CRITICAL ARCHITECTURAL WARNING: SQLite is active in a PRODUCTION environment. "
+            "Please configure DATABASE_URL=postgresql+psycopg2://... for high concurrency."
+        )
+
 SessionLocal = sessionmaker(
     bind=engine,
     autocommit=False,
     autoflush=False,
     expire_on_commit=False,
 )
+
+
+def check_db_health() -> bool:
+    """Verifies active connectivity to the underlying database."""
+    try:
+        with engine.connect() as conn:
+            conn.execute(text("SELECT 1"))
+            return True
+    except Exception as exc:
+        logger.error("Database health check failed: %s", exc)
+        return False
 
 
 # ---------------------------------------------------------------------------

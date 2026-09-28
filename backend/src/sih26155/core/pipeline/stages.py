@@ -82,7 +82,7 @@ def build_mvp_policy() -> PolicySet:
                 expected=2,
                 severity="high",
                 remediation_required=True,
-                frameworks=["CIS", "NIST SP 800-53", "DISA STIG", "ISO/IEC 27001", "PCI-DSS"],
+                frameworks=["CIS", "NIST SP 800-53", "DISA STIG", "ISO/IEC 27001", "PCI-DSS", "SOC 2"],
             ),
             PolicyRule(
                 control_id="MGMT-TELNET-001",
@@ -92,7 +92,7 @@ def build_mvp_policy() -> PolicySet:
                 expected=False,
                 severity="high",
                 remediation_required=True,
-                frameworks=["CIS", "NIST SP 800-53", "DISA STIG", "ISO/IEC 27001", "PCI-DSS"],
+                frameworks=["CIS", "NIST SP 800-53", "DISA STIG", "ISO/IEC 27001", "PCI-DSS", "SOC 2"],
             ),
             PolicyRule(
                 control_id="MGMT-HTTP-001",
@@ -102,7 +102,7 @@ def build_mvp_policy() -> PolicySet:
                 expected=False,
                 severity="high",
                 remediation_required=True,
-                frameworks=["CIS", "NIST SP 800-53", "DISA STIG", "ISO/IEC 27001", "PCI-DSS"],
+                frameworks=["CIS", "NIST SP 800-53", "DISA STIG", "ISO/IEC 27001", "PCI-DSS", "SOC 2"],
             ),
             PolicyRule(
                 control_id="AUTH-LOGIN-001",
@@ -111,7 +111,7 @@ def build_mvp_policy() -> PolicySet:
                 operator="eq",
                 expected=True,
                 severity="medium",
-                frameworks=["CIS", "NIST SP 800-53", "DISA STIG", "ISO/IEC 27001", "PCI-DSS"],
+                frameworks=["CIS", "NIST SP 800-53", "DISA STIG", "ISO/IEC 27001", "PCI-DSS", "SOC 2"],
             ),
             PolicyRule(
                 control_id="LOG-001",
@@ -120,7 +120,7 @@ def build_mvp_policy() -> PolicySet:
                 operator="eq",
                 expected=True,
                 severity="medium",
-                frameworks=["CIS", "NIST SP 800-53", "DISA STIG", "ISO/IEC 27001", "PCI-DSS"],
+                frameworks=["CIS", "NIST SP 800-53", "DISA STIG", "ISO/IEC 27001", "PCI-DSS", "SOC 2"],
             ),
         ],
     )

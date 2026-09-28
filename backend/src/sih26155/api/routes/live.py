@@ -104,14 +104,25 @@ def live_fetch_and_analyze(request: LiveFetchRequest) -> LiveFetchResponse:
         raw_config = generate_local_device_config(info)
         source_label = f"live:{info['hostname']}:localhost"
     else:
+        password_val = (
+            request.password.get_secret_value()
+            if hasattr(request.password, "get_secret_value")
+            else request.password
+        )
+        secret_val = (
+            request.secret.get_secret_value()
+            if hasattr(request.secret, "get_secret_value")
+            else (request.secret or "")
+        )
+
         fetch_cfg = LiveFetchConfig(
             host=request.host,
             username=request.username,
-            password=request.password,
+            password=password_val,
             device_type=request.device_type,
             transport=Transport(request.transport),
             port=request.port,
-            secret=request.secret or "",
+            secret=secret_val,
             timeout=request.timeout,
             session_timeout=request.session_timeout,
             optional_args=request.optional_args,

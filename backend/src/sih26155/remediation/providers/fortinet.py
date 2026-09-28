@@ -7,6 +7,7 @@ and inverse rollback templates.
 
 from __future__ import annotations
 
+import os
 import re
 from typing import Any
 
@@ -104,7 +105,7 @@ class FortinetRemediationProvider(BaseRemediationProvider):
                 commands=[
                     "config log syslogd setting",
                     "    set status enable",
-                    "    set server 10.10.40.50",
+                    f"    set server {os.getenv('COMPLIANCE_SYSLOG_SERVER', '10.10.40.50')}",
                     "end",
                 ],
                 rollback_commands=[
@@ -177,7 +178,12 @@ class FortinetRemediationProvider(BaseRemediationProvider):
         current_config: str,
         baseline: dict[str, Any] | None = None,
     ) -> bool:
-        cfg = current_config.lower()
+        active_lines = [
+            line.strip().lower()
+            for line in current_config.splitlines()
+            if line.strip() and not line.strip().startswith(("#", "!"))
+        ]
+        cfg = "\n".join(active_lines)
         if control_id == "MGMT-TELNET-001":
             return "set admin-telnet disable" in cfg or "admin-telnet" not in cfg
         elif control_id == "MGMT-SSH-001":
@@ -185,9 +191,9 @@ class FortinetRemediationProvider(BaseRemediationProvider):
         elif control_id == "MGMT-HTTP-001":
             return "set admin-sport 443" in cfg or "set admin-http-redirect enable" in cfg
         elif control_id == "AUTH-LOGIN-001":
-            return "set admin-lockout-threshold" in cfg
+            return any("set admin-lockout-threshold" in l for l in active_lines)
         elif control_id == "LOG-001":
-            return "config log syslogd setting" in cfg
+            return any("config log syslogd setting" in l for l in active_lines)
         return False
 
     def apply_to_config_text(

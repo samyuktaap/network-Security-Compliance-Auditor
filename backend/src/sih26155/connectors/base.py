@@ -116,3 +116,29 @@ class DeviceConnector(ABC):
     def normalize_configuration(self, raw_config: str) -> NormalizedDeviceConfig:
         """Parses collected raw configuration into canonical NormalizedDeviceConfig."""
         pass
+
+    def apply_remediation_commands(self, commands: list[str]) -> bool:
+        """
+        Executes verified remediation commands in an atomic configuration session.
+        Uses Netmiko send_config_set with error checking.
+        """
+        if not commands:
+            return True
+        try:
+            from netmiko import ConnectHandler  # type: ignore
+
+            device_type = getattr(self, "netmiko_device_type", "cisco_ios")
+            device_params = {
+                "device_type": device_type,
+                "host": self.host,
+                "username": self.username,
+                "password": self.password,
+                "port": self.port,
+                "conn_timeout": self.timeout,
+                "auth_timeout": self.timeout,
+            }
+            with ConnectHandler(**device_params) as net_connect:
+                net_connect.send_config_set(commands)
+            return True
+        except Exception as exc:
+            raise DeviceConnectorError(f"Failed to push remediation commands to {self.host}: {exc}") from exc

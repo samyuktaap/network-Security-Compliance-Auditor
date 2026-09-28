@@ -59,6 +59,8 @@ class LiveApplyRequest(BaseModel):
     approved: bool = Field(True, description="Explicit operator approval required")
     approved_by: str = Field("Security Administrator", description="Username or role of operator")
     is_demo: bool = False
+    dry_run: bool = Field(True, description="Safety simulation mode. If False, commands are dispatched to live hardware.")
+    credentials: dict[str, Any] | None = Field(None, description="Optional target credentials for live push")
     # Optional inline fields — used when the device is an SSH/demo device not yet in the discovered_devices table
     raw_config: str | None = Field(None, description="Raw config text (pass for SSH/demo devices not in DB)")
     vendor: str | None = Field(None, description="Vendor override (e.g. 'cisco') when device not in DB")
@@ -179,6 +181,8 @@ def apply_live_remediation(req: LiveApplyRequest):
             raw_config=raw_config,
             approved_by=req.approved_by,
             is_demo=req.is_demo or dev.is_demo,
+            dry_run=req.dry_run,
+            credentials=req.credentials,
         )
 
         if result.get("status") == "ABORTED_PRECONDITION_FAILED":

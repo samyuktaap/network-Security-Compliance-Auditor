@@ -116,12 +116,15 @@ class FortinetConnector(DeviceConnector):
             )
 
         mgmt = ManagementServiceInfo(
-            ssh_enabled=True,
+            ssh_enabled=bool(
+                re.search(r"set\s+allowaccess\s+.*?\bssh\b", raw_config, re.IGNORECASE)
+                or re.search(r"config\s+system\s+admin", raw_config, re.IGNORECASE)
+            ),
             ssh_version=2,
-            telnet_enabled=False,
-            http_enabled=bool(re.search(r"set allowaccess .*?http\b", raw_config)),
-            https_enabled=bool(re.search(r"set allowaccess .*?https\b", raw_config)),
-            snmp_enabled=bool(re.search(r"config system snmp", raw_config)),
+            telnet_enabled=bool(re.search(r"set\s+allowaccess\s+.*?\btelnet\b", raw_config, re.IGNORECASE)),
+            http_enabled=bool(re.search(r"set\s+allowaccess\s+.*?\bhttp\b", raw_config, re.IGNORECASE)),
+            https_enabled=bool(re.search(r"set\s+allowaccess\s+.*?\bhttps\b", raw_config, re.IGNORECASE)),
+            snmp_enabled=bool(re.search(r"config\s+system\s+snmp", raw_config, re.IGNORECASE)),
         )
 
         return NormalizedDeviceConfig(

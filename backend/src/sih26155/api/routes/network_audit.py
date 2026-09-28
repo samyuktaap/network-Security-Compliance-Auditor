@@ -13,7 +13,7 @@ from typing import Any
 import uuid
 
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, SecretStr
 
 from sih26155.connectors.factory import get_connector
 from sih26155.core.pipeline.analyze import analyze_config
@@ -199,7 +199,7 @@ class DiscoveryScanRequest(BaseModel):
 class AuthenticateDeviceRequest(BaseModel):
     device_id: str
     username: str
-    password: str = ""
+    password: SecretStr = Field(default=SecretStr(""), description="Password for authentication")
     port: int = 22
     auth_type: str = "ssh_password"
     is_demo: bool = False
@@ -208,7 +208,7 @@ class AuthenticateDeviceRequest(BaseModel):
 class AuditDeviceRequest(BaseModel):
     device_id: str
     username: str = "admin"
-    password: str = ""
+    password: SecretStr = Field(default=SecretStr(""), description="Password for collection/audit")
     port: int = 22
     is_demo: bool = False
 
@@ -324,11 +324,12 @@ def authenticate_device(req: AuthenticateDeviceRequest):
         else:
             # Real live verification via connector
             try:
+                pass_str = req.password.get_secret_value() if hasattr(req.password, "get_secret_value") else req.password
                 connector = get_connector(
                     vendor=dev.vendor,
                     host=dev.ip,
                     username=req.username,
-                    password=req.password,
+                    password=pass_str,
                     port=req.port,
                     timeout=10,
                 )
@@ -373,11 +374,12 @@ def collect_device_config(req: AuditDeviceRequest):
             raw_config = DEMO_CONFIG_FIXTURES.get(dev.vendor, DEMO_CONFIG_FIXTURES["Cisco"])
         else:
             try:
+                pass_str = req.password.get_secret_value() if hasattr(req.password, "get_secret_value") else req.password
                 connector = get_connector(
                     vendor=dev.vendor,
                     host=dev.ip,
                     username=req.username,
-                    password=req.password,
+                    password=pass_str,
                     port=req.port,
                 )
                 raw_config = connector.collect_configuration()
@@ -415,11 +417,12 @@ def audit_device(req: AuditDeviceRequest):
                 raw_config = DEMO_CONFIG_FIXTURES.get(dev.vendor, DEMO_CONFIG_FIXTURES["Cisco"])
             else:
                 try:
+                    pass_str = req.password.get_secret_value() if hasattr(req.password, "get_secret_value") else req.password
                     connector = get_connector(
                         vendor=dev.vendor,
                         host=dev.ip,
                         username=req.username,
-                        password=req.password,
+                        password=pass_str,
                         port=req.port,
                     )
                     raw_config = connector.collect_configuration()
