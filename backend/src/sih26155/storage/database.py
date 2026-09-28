@@ -1,12 +1,7 @@
 """
-PostgreSQL database engine and session factory.
+Database engine and session factory.
 
-Connection is configured via environment variable DATABASE_URL.
-Falls back to a SQLite file database for local development if DATABASE_URL
-is not set, so the application starts without any external services.
-
-Set in .env (or environment):
-    DATABASE_URL=postgresql+psycopg2://user:password@host:5432/dbname
+Supports Supabase PostgreSQL (via DATABASE_URL in .env) with a local development fallback.
 """
 
 from __future__ import annotations
@@ -14,21 +9,35 @@ from __future__ import annotations
 import logging
 import os
 from contextlib import contextmanager
+from pathlib import Path
 from typing import Generator
 
+from dotenv import load_dotenv
 from sqlalchemy import create_engine, event, text
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
 logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
-# Connection URL
+# Connection URL & Environment Configuration
 # ---------------------------------------------------------------------------
+
+# Find the project root and load .env
+PROJECT_ROOT = Path(__file__).resolve().parents[4]
+ENV_FILE = PROJECT_ROOT / ".env"
+
+if ENV_FILE.exists():
+    load_dotenv(ENV_FILE, override=True)
+else:
+    load_dotenv(override=True)
 
 _DATABASE_URL: str = os.getenv(
     "DATABASE_URL",
-    "sqlite:///./data/compliance.db",   # local dev fallback
+    "sqlite:///./data/compliance.db",   # fallback if DATABASE_URL not set
 )
+
+db_type = _DATABASE_URL.split("://")[0] if "://" in _DATABASE_URL else "sqlite"
+logger.info("Database initialized with driver/type: %s", db_type)
 
 # SQLite needs check_same_thread=False for FastAPI and busy timeout to avoid locked DB
 _connect_args: dict = (
@@ -96,7 +105,6 @@ class Base(DeclarativeBase):
 
 def create_all_tables() -> None:
     """Create all ORM-mapped tables if they do not already exist."""
-    # Import models so they are registered on Base before create_all()
     from sih26155.storage import repositories  # noqa: F401
     Base.metadata.create_all(bind=engine)
 
@@ -116,6 +124,6 @@ def get_db() -> Generator[Session, None, None]:
 
 
 def get_db_session() -> Generator[Session, None, None]:
-    """FastAPI dependency — yields a session per request."""
+    """FastAPI dependency -- yields a session per request."""
     with get_db() as db:
         yield db

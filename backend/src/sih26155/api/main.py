@@ -1,7 +1,6 @@
 from contextlib import asynccontextmanager
 import logging
 import os
-from typing import Any
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -21,12 +20,12 @@ from sih26155.storage.database import check_db_health, create_all_tables
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Create all database tables on startup (idempotent) and setup structured logging."""
+    """Create all database tables on startup and configure structured logging."""
     setup_logging()
     logger = logging.getLogger("sih26155.api")
     try:
         create_all_tables()
-        logger.info("Database schemas verified and initialized.")
+        logger.info("Database schemas initialized.")
     except Exception as exc:
         logger.critical("Database initialization failed during startup: %s", exc, exc_info=True)
     yield
