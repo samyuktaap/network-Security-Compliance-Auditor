@@ -33,8 +33,19 @@ else:
 
 _DATABASE_URL: str = os.getenv(
     "DATABASE_URL",
-    "sqlite:///./data/compliance.db",   # fallback if DATABASE_URL not set
+    f"sqlite:///{(PROJECT_ROOT / 'data' / 'compliance.db').as_posix()}",
 )
+
+# If SQLite URL is relative, resolve it against PROJECT_ROOT
+if _DATABASE_URL.startswith("sqlite:///"):
+    raw_path = _DATABASE_URL[len("sqlite:///"):]
+    if not (Path(raw_path).is_absolute() or (len(raw_path) > 2 and raw_path[1] == ":")):
+        clean_path = raw_path.lstrip("./").lstrip(".\\")
+        abs_db_path = PROJECT_ROOT / clean_path
+        abs_db_path.parent.mkdir(parents=True, exist_ok=True)
+        _DATABASE_URL = f"sqlite:///{abs_db_path.as_posix()}"
+    else:
+        Path(raw_path).parent.mkdir(parents=True, exist_ok=True)
 
 db_type = _DATABASE_URL.split("://")[0] if "://" in _DATABASE_URL else "sqlite"
 logger.info("Database initialized with driver/type: %s", db_type)
