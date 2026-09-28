@@ -38,6 +38,15 @@ function IconShield({ size = 18, className = '' }) {
   )
 }
 
+function IconVideo({ size = 18, className = '' }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <polygon points="23 7 16 12 23 17 23 7" />
+      <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+    </svg>
+  )
+}
+
 function IconDashboard({ size = 18, className = '' }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
@@ -1433,12 +1442,15 @@ export default function App() {
 
         <div className="topbar-right">
           <button
-            className="btn-video-assister-top"
-            onClick={() => setShowVideoAssisterModal(true)}
+            className={`btn-video-assister-top ${activeTab === 'videos' ? 'active' : ''}`}
+            onClick={() => {
+              setActiveTab('videos')
+              window.scrollTo({ top: 0, behavior: 'smooth' })
+            }}
             title="Watch AI Video Walkthroughs explaining every feature"
           >
             <span className="live-rec-dot" />
-            <IconRadio size={14} /> AI Video Assister
+            <IconVideo size={14} /> AI Video Assister
           </button>
           <button
             className="btn-live-connect-top"
@@ -1519,6 +1531,18 @@ export default function App() {
               <span className="nav-icon"><IconServer size={18} /></span>
               {!sidebarCollapsed && <span className="nav-text">Live SSH Devices</span>}
               {!sidebarCollapsed && <span className="nav-badge green">{liveDevices.filter(d => d.status === 'online').length}</span>}
+            </button>
+            <button
+              className={`nav-link ${activeTab === 'videos' ? 'active' : ''}`}
+              onClick={() => {
+                setActiveTab('videos')
+                window.scrollTo({ top: 0, behavior: 'smooth' })
+              }}
+              title="AI Video Walkthroughs & Architecture Tours"
+            >
+              <span className="nav-icon"><IconVideo size={18} /></span>
+              {!sidebarCollapsed && <span className="nav-text">Video Walkthroughs</span>}
+              {!sidebarCollapsed && <span className="nav-badge purple">AI Tour</span>}
             </button>
           </nav>
 
@@ -3587,6 +3611,24 @@ export default function App() {
               </div>
             </div>
           )}
+
+          {/* TAB 11: AI VIDEO WALKTHROUGHS & FEATURE TOURS */}
+          {activeTab === 'videos' && (
+            <div className="tab-pane video-walkthrough-pane">
+              <VideoAssisterModal
+                isOpen={true}
+                isEmbedded={true}
+                onClose={() => {
+                  setActiveTab('dashboard')
+                  window.scrollTo({ top: 0, behavior: 'smooth' })
+                }}
+                onNavigateToTab={(tab) => {
+                  setActiveTab(tab)
+                  window.scrollTo({ top: 0, behavior: 'smooth' })
+                }}
+              />
+            </div>
+          )}
         </main>
       </div>
 
@@ -4591,11 +4633,14 @@ export default function App() {
       {/* FLOATING VIDEO ASSISTER QUICK ORB */}
       <button
         className="floating-video-assister-orb"
-        onClick={() => setShowVideoAssisterModal(true)}
+        onClick={() => {
+          setActiveTab('videos')
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+        }}
         title="Open AI Video Assister & Feature Guides"
       >
         <span className="fva-rec-dot" />
-        <IconRadio size={16} />
+        <IconVideo size={16} />
         <span className="fva-label">AI Video Assister</span>
       </button>
 

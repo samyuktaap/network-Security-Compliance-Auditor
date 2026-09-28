@@ -478,7 +478,7 @@ export const VIDEO_CATALOG = [
    VIDEO ASSISTER MODAL COMPONENT
    ========================================================================== */
 
-export default function VideoAssisterModal({ isOpen, onClose, onNavigateToTab }) {
+export default function VideoAssisterModal({ isOpen = true, onClose, onNavigateToTab, isEmbedded = false }) {
   const [selectedVideo, setSelectedVideo] = useState(VIDEO_CATALOG[0])
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
@@ -587,29 +587,12 @@ export default function VideoAssisterModal({ isOpen, onClose, onNavigateToTab })
     v.desc.toLowerCase().includes(searchFilter.toLowerCase())
   )
 
-  if (!isOpen) return null
+  if (!isOpen && !isEmbedded) return null
 
-  return (
-    <div className="aegis-modal-backdrop video-assister-backdrop" onClick={onClose}>
-      <div className="aegis-modal video-assister-modal" onClick={e => e.stopPropagation()}>
-        {/* MODAL TOPBAR */}
-        <div className="modal-header va-modal-header">
-          <div className="va-header-title-wrap">
-            <div className="va-live-rec-badge">
-              <span className="rec-pulse-dot" />
-              <span>AI VIDEO ASSISTER &amp; FEATURE TOUR</span>
-            </div>
-            <h3>Interactive Feature Walkthroughs &amp; Architecture Simulator</h3>
-          </div>
-          <button className="btn-close-modal" onClick={onClose}>
-            <IconCross size={18} />
-          </button>
-        </div>
-
-        {/* MODAL MAIN CONTENT */}
-        <div className="va-modal-body">
-          {/* LEFT: VIDEO PLAYER & SIMULATION CANVAS */}
-          <div className="va-player-container">
+  const mainBody = (
+    <div className={`va-modal-body ${isEmbedded ? 'va-embedded-body' : ''}`}>
+      {/* LEFT: VIDEO PLAYER & SIMULATION CANVAS */}
+      <div className="va-player-container">
             {/* SIMULATION SCREEN */}
             <div className="va-screen-wrapper">
               <div className="va-screen-scanline" />
@@ -1026,6 +1009,44 @@ export default function VideoAssisterModal({ isOpen, onClose, onNavigateToTab })
             </div>
           </div>
         </div>
+  )
+
+  if (isEmbedded) {
+    return (
+      <div className="va-embedded-wrapper">
+        <div className="va-embedded-header">
+          <div className="va-header-title-wrap">
+            <div className="va-live-rec-badge">
+              <span className="rec-pulse-dot" />
+              <span>AI VIDEO ASSISTER &amp; FEATURE TOUR</span>
+            </div>
+            <h3>Interactive Feature Walkthroughs &amp; Architecture Simulator</h3>
+            <p className="va-embedded-desc">
+              Watch interactive step-by-step simulations explaining every feature of AegisGuard, with live voice narration and key architectural takeaways.
+            </p>
+          </div>
+        </div>
+        {mainBody}
+      </div>
+    )
+  }
+
+  return (
+    <div className="aegis-modal-backdrop video-assister-backdrop" onClick={onClose}>
+      <div className="aegis-modal video-assister-modal" onClick={e => e.stopPropagation()}>
+        <div className="modal-header va-modal-header">
+          <div className="va-header-title-wrap">
+            <div className="va-live-rec-badge">
+              <span className="rec-pulse-dot" />
+              <span>AI VIDEO ASSISTER &amp; FEATURE TOUR</span>
+            </div>
+            <h3>Interactive Feature Walkthroughs &amp; Architecture Simulator</h3>
+          </div>
+          <button className="btn-close-modal" onClick={onClose}>
+            <IconCross size={18} />
+          </button>
+        </div>
+        {mainBody}
       </div>
     </div>
   )
