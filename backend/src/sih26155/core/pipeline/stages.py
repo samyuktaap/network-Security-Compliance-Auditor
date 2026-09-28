@@ -14,6 +14,7 @@ from sih26155.ingestion.detection.vendor_detector import (
     detect_vendor,
 )
 from sih26155.parsers.cisco.ios import CiscoIOSParser
+from sih26155.parsers.cisco.iosxe import CiscoIOSXEParser
 from sih26155.parsers.juniper.junos import JuniperJunosParser
 from sih26155.parsers.paloalto.panos import PaloAltoPANOSParser
 
@@ -29,8 +30,13 @@ def parse_stage(
 ):
     vendor_val = detection.vendor.value if hasattr(detection.vendor, "value") else str(detection.vendor)
 
-    if vendor_val == "cisco":
+    if vendor_val in ("cisco", "cisco_ios", "ios"):
         return CiscoIOSParser().parse(
+            config=config,
+            source_file=source_file,
+        )
+    elif vendor_val in ("cisco_iosxe", "iosxe", "ios_xe"):
+        return CiscoIOSXEParser().parse(
             config=config,
             source_file=source_file,
         )
@@ -45,7 +51,7 @@ def parse_stage(
             source_file=source_file,
         )
 
-    # Fallback to Cisco parser for generic configurations
+    # Fallback: treat unknown vendor configs as Cisco IOS (most common default)
     return CiscoIOSParser().parse(
         config=config,
         source_file=source_file,

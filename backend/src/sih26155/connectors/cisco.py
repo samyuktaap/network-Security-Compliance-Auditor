@@ -120,7 +120,9 @@ class CiscoConnector(DeviceConnector):
         telnet_disabled = bool(re.search(r"transport input ssh", raw_config, re.IGNORECASE))
         http_server = bool(re.search(r"^ip http server", raw_config, re.MULTILINE | re.IGNORECASE))
         https_server = bool(re.search(r"^ip http secure-server", raw_config, re.MULTILINE | re.IGNORECASE))
-        snmp = bool(re.search(r"snmp-server community", raw_config, re.IGNORECASE))
+        snmp_v3 = bool(re.search(r"snmp-server group|snmp-server user", raw_config, re.IGNORECASE))
+        snmp_v2 = bool(re.search(r"snmp-server community", raw_config, re.IGNORECASE))
+        snmp = snmp_v3 or snmp_v2
 
         mgmt = ManagementServiceInfo(
             ssh_enabled=ssh_enabled,
@@ -129,7 +131,7 @@ class CiscoConnector(DeviceConnector):
             http_enabled=http_server,
             https_enabled=https_server,
             snmp_enabled=snmp,
-            snmp_version="v2c" if snmp else "none",
+            snmp_version="v3" if snmp_v3 else ("v2c" if snmp_v2 else "none"),
         )
 
         # ACLs / Firewall
@@ -155,7 +157,11 @@ class CiscoConnector(DeviceConnector):
             hostname=hostname,
             ip_address=self.host,
             vendor="Cisco",
-            device_type="Switch" if "catalyst" in raw_config.lower() else "Router",
+            device_type=(
+                "Firewall" if re.search(r"asa|firewall", raw_config, re.IGNORECASE)
+                else "Switch" if re.search(r"catalyst|switch|nexus|vlan", raw_config, re.IGNORECASE)
+                else "Router"
+            ),
             os_version=os_version,
             is_live=True,
             credential_status="authenticated",
