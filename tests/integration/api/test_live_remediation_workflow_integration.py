@@ -57,7 +57,8 @@ def test_remediation_live_dry_run_workflow():
     assert response.status_code == 200
     data = response.json()
     assert data["success"] is True
-    assert "remediation" in data
-    assert "backup_snapshot_id" in data["remediation"]
-    assert "updated_config" in data["remediation"]
-    assert "diff" in data["remediation"]
+    assert data["status"] == "RESOLVED"
+    assert "audit_record_id" in data
+    assert "backup_snapshot_id" in data
+    assert "commands_applied" in data
+    assert "diff" in data

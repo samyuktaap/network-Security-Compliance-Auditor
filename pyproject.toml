@@ -53,6 +53,28 @@ dev = [
     "ruff>=0.6,<1",
     "mypy>=1.11,<2",
 ]
+connectors = [
+    "netmiko>=4.4,<5",
+    "napalm>=5.0,<6",
+]
+ai = [
+    "sentence-transformers>=3.0,<6",
+    "numpy>=1.26,<3",
+]
+pdf = [
+    "reportlab>=4.2,<5",
+]
+postgres = [
+    "psycopg2-binary>=2.9,<3",
+]
+all = [
+    "netmiko>=4.4,<5",
+    "napalm>=5.0,<6",
+    "sentence-transformers>=3.0,<6",
+    "numpy>=1.26,<3",
+    "reportlab>=4.2,<5",
+    "psycopg2-binary>=2.9,<3",
+]
 
 
 [tool.setuptools]
